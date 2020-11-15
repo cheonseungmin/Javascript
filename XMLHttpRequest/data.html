@@ -1,0 +1,54 @@
+<!--Data.html-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>title</title>
+</head>
+
+<body>
+    <script>
+        var xmlHttp = new XMLHttpRequest();
+
+        xmlHttp.onreadystatechange = function() {
+            if (this.status === 200 && this.readyState === this.DONE) {
+                
+                // JSON.parse()를 쓰지 않기 위한 노력 ㅠㅠ
+                let data = {};
+                let str = xmlHttp.response;
+                str = str.substring(1,str.length-1);
+                let props = str.split(',');
+                props.forEach(prop => {
+                    let tmp = prop.split(':');
+                    let key = tmp[0].substring(1, tmp[0].length-1)
+                    let value = tmp[1].substring(1, tmp[1].length-1)
+                    data[key] = value;
+                });
+                
+                document.querySelector("#responseData").innerHTML = data['data1'];
+            }
+        }
+
+        var xhr = function() {
+            var data1 = document.querySelector("#text1").value;
+            var data = `data1=${data1}`;
+            
+            xmlHttp.open("POST", "http://localhost:3000/xml");
+            // post 요청은 컨텐트 타입을 명시해줘야 한다.
+            xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            xmlHttp.send(data);
+
+            document.querySelector("#requestData").innerHTML = data1;
+        }
+
+    </script>
+    <input type="text" id="text1" />
+    <button onclick="xhr()">xmlHttpRequest</button>
+    <div id="requestData">requestData</div>
+    <div id="responseData">responseData</div>
+</body>
+
+</html>

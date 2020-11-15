@@ -1,0 +1,52 @@
+<!--jsonData.html-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>title</title>
+</head>
+
+<body>
+    <script>
+        // xhr을 통해 새로고침 없이도 엘리멘트 갱신이 가능하다.
+        var xmlHttp = new XMLHttpRequest();
+
+        // readyState 속성이 변화할 때 마다 호출된다.
+        // https://developer.mozilla.org/ko/docs/Web/API/XMLHttpRequest/readyState
+        xmlHttp.onreadystatechange = function() {
+            if (this.status === 200 && this.readyState === this.DONE) {
+                // xhr의 response를 json 형태로 파싱한다.
+                let data = JSON.parse(xmlHttp.response);
+                document.querySelector("#responseData").innerHTML = data.data1;
+            }
+        }
+
+        // 클릭 시에 실행되는 함수
+        var xhr = function() {
+            var data1 = document.querySelector("#text1").value;
+            var jsonData = {
+                data1: data1
+            }
+            
+            // 방식과 경로를 입력
+            xmlHttp.open("POST", "http://localhost:3000/xml");
+            
+            // 컨텐트 타입을 json으로 설정
+            xmlHttp.setRequestHeader('Content-type', 'application/json');
+            
+            // 데이터를 json 형식으로 인코딩 후 전송
+            xmlHttp.send(JSON.stringify(jsonData));
+            
+            document.querySelector("#requestData").innerHTML = data1;
+        }
+
+    </script>
+    <input type="text" id="text1" />
+    <button onclick="xhr()">xmlHttpRequest</button>
+    <div id="requestData">requestData</div>
+    <div id="responseData">responseData</div>
+</body>
+
+</html>
