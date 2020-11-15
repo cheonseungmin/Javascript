@@ -1,0 +1,44 @@
+<!--fetch.html-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>title</title>
+</head>
+
+<body>
+    <script>
+        var req = function() {
+            var data = {
+                // 전송할 값을 추출한다.
+                data1: document.querySelector('#text1').value
+            }
+
+            fetch('http://localhost:3000/req', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // 전송할 데이터를 json 인코딩해야 한다.
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    // 서버로부터 받은 값을 json 파싱하여 div 갱신함
+                    document.querySelector('#responseData').innerHTML = result.data1;
+                });
+
+            // 데이터를 전송하고 전송 값으로 div 갱신함
+            document.querySelector('#requestData').innerHTML = data.data1;
+        }
+
+    </script>
+    <input type="text" id="text1" />
+    <button onclick="req()">fetch</button>
+    <div id="requestData">requestData</div>
+    <div id="responseData">responseData</div>
+</body>
+
+</html>
